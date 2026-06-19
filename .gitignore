@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# 要件定義ファイル
+docs/requirements.md
+
+# CFR 学習済み重みファイル
+*.pkl
+weights/
