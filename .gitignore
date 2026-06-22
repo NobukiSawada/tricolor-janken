@@ -220,6 +220,9 @@ __marimo__/
 # ドキュメント（ローカル管理）
 /docs/
 
+# Vite キャッシュ
+frontend/.vite/
+
 # CFR 学習済み重みファイル
 *.pkl
 weights/

@@ -161,23 +161,20 @@ class GameState:
 
     def info_set_key(self) -> str:
         """
-        Compact string key for the current player's information set.
+        Reduced information set key using only strategically relevant state.
 
-        A player observes:
-          - their own remaining hand (bitmask)
-          - all completed rounds (both cards revealed after each round)
-          - current scores and who is first this round
-          - (phase 1 only) the COLOR of the first player's pending card,
-            but NOT its shape — the central imperfect-information element
+        Since all cards are revealed after each round, both players know both
+        players' remaining hands exactly.  The full play history is therefore
+        redundant — only the current state matters (Markov property):
 
-        History is encoded as a fixed-width string: one char per value,
-        three chars per round: '{fp_card}{sp_card}{result+1}'.
+          hands[0] | hands[1] | score_diff | first  [| color_hint]
+
+        This shrinks the info-set space from ~3×10¹¹ (history-based) to
+        ~5 million (state-based), making exact solving tractable.
         """
-        p    = self.current_player
-        hist = ''.join(f'{a}{b}{r + 1}' for a, b, r, *_ in self.history)
-        key  = f'{p}|{self.hands[p]}|{self.scores[0]}-{self.scores[1]}|{self.first}|{hist}'
+        score_diff = self.scores[0] - self.scores[1]
+        key = f'{self.hands[0]}-{self.hands[1]}|{score_diff}|{self.first}'
         if self.phase == 1:
-            # Second player sees colour of pending card (values 0/1/2)
             key += f'|c{card_color(self.pending)}'
         return key
 
