@@ -10,8 +10,8 @@ html, body, #root {
 
 body {
   font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', sans-serif;
-  background: #0f0f1a;
-  color: #e0e0f0;
+  background: #ffffff;
+  color: #212121;
   -webkit-font-smoothing: antialiased;
 }
 
