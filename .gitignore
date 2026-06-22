@@ -217,8 +217,8 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# 要件定義ファイル
-docs/requirements.md
+# ドキュメント（ローカル管理）
+/docs/
 
 # CFR 学習済み重みファイル
 *.pkl
