@@ -79,15 +79,12 @@ def _advance_ai(session: dict) -> None:
     """Auto-play the AI's turns until it's the human's turn or game over."""
     state = session['state']
     while not state.is_terminal and state.current_player == AI:
-        if state.phase == 0:
-            # Start of a new round — capture first player before playing
-            _this_first = state.first
-        old_round = state.round_num
-        action = _ai_action(state)
-        state  = state.step(action)
+        round_first = state.first   # first player of the current round (valid in both phases)
+        old_round   = state.round_num
+        action      = _ai_action(state)
+        state       = state.step(action)
         if state.round_num > old_round:
-            # A round just completed; record who was first in that round
-            session['round_firsts'].append(_this_first)
+            session['round_firsts'].append(round_first)
     session['state'] = state
 
 
@@ -185,17 +182,14 @@ def play(req: PlayRequest) -> dict:
     if req.card_id not in state.legal_actions():
         raise HTTPException(status_code=400, detail=f'Card {req.card_id} is not a legal action.')
 
-    # Capture first player before human moves (needed if human is in phase 0)
-    if state.phase == 0:
-        _this_first = state.first
-    old_round = state.round_num
+    round_first = state.first   # first player of the current round (valid in both phases)
+    old_round   = state.round_num
 
     state = state.step(req.card_id)
     _session['state'] = state
 
-    # If the round just completed (human played in phase 1), record it
     if state.round_num > old_round:
-        _session['round_firsts'].append(_this_first)
+        _session['round_firsts'].append(round_first)
 
     # Auto-advance AI turns
     _advance_ai(_session)
