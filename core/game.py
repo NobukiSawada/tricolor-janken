@@ -143,7 +143,7 @@ class GameState:
         else:                         # draw → second player becomes first
             s.first = sp
 
-        s.history.append((fp_card, sp_card, result))
+        s.history.append((fp_card, sp_card, result, fp))
         s.round_num += 1
         s.phase   = 0
         s.pending = -1
@@ -174,7 +174,7 @@ class GameState:
         three chars per round: '{fp_card}{sp_card}{result+1}'.
         """
         p    = self.current_player
-        hist = ''.join(f'{a}{b}{r + 1}' for a, b, r in self.history)
+        hist = ''.join(f'{a}{b}{r + 1}' for a, b, r, *_ in self.history)
         key  = f'{p}|{self.hands[p]}|{self.scores[0]}-{self.scores[1]}|{self.first}|{hist}'
         if self.phase == 1:
             # Second player sees colour of pending card (values 0/1/2)
