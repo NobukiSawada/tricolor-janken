@@ -1,0 +1,129 @@
+.card {
+  width: 72px;
+  height: 104px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 6px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a1a2e;
+  background: #c8c8c8;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  cursor: default;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.card--white {
+  background: linear-gradient(145deg, #e8e8e8, #d0d0d0);
+  color: #2a2a2a;
+}
+
+.card--blue {
+  background: linear-gradient(145deg, #6eb5ff, #4a8fd9);
+  color: #0a2a4a;
+}
+
+.card--red {
+  background: linear-gradient(145deg, #ff7b7b, #d94a4a);
+  color: #3a0a0a;
+}
+
+.card--facedown {
+  background: linear-gradient(145deg, #2c3e50, #1a252f);
+  color: #e0e0e0;
+  border-color: rgba(255, 255, 255, 0.15);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 6px,
+    rgba(255, 255, 255, 0.04) 6px,
+    rgba(255, 255, 255, 0.04) 12px
+  );
+}
+
+.card--hint {
+  background-image: none;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+}
+
+.card--hint.card--white {
+  background: linear-gradient(145deg, #9e9e9e, #7e7e7e);
+  color: #f0f0f0;
+}
+
+.card--hint.card--blue {
+  background: linear-gradient(145deg, #2a5a9e, #1a3a7e);
+  color: #a0d0ff;
+}
+
+.card--hint.card--red {
+  background: linear-gradient(145deg, #9e2a2a, #7e1a1a);
+  color: #ffb0b0;
+}
+
+.card--clickable {
+  cursor: pointer;
+}
+
+.card--clickable:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+}
+
+.card--clickable:active {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.card--dimmed {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.card__emoji {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.card__name {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.card__color {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.card__points {
+  font-size: 10px;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.card__back-mark {
+  font-size: 32px;
+  opacity: 0.3;
+}
+
+.card__hint-label {
+  font-size: 10px;
+  opacity: 0.7;
+  letter-spacing: 0.1em;
+}
+
+.card__hint-color {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.card__hint-pts {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.8;
+}

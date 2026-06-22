@@ -47,3 +47,51 @@
 
 ### 次フェーズの予定
 - Phase 2: フロントエンド実装（UI）— スタック選定（Tauri/Flutter/PySide6 等）
+
+---
+
+## 2026-06-22 — Phase 2 開始: Tauri + React + TypeScript フロントエンド
+
+**ブランチ: `step2`**
+
+### フロントエンドスタック選定
+
+- **Tauri + React + TypeScript** を採用
+  - Reactでゲームロジックを表示、PythonバックエンドはFastAPI経由で連携
+  - Rustが未インストールのため、現時点では Vite dev server + FastAPI 構成で開発
+  - 将来的に Tauri でラップして `.exe` 化予定
+
+### 実装内容
+
+#### `api/main.py` — Python ↔ React 橋渡しサーバー (FastAPI)
+- エンドポイント: `POST /api/new-game`, `POST /api/play`, `GET /api/state`
+- 学習済み `weights.pkl` があれば CFR戦略を使用、なければランダムプレイにフォールバック
+- AI のターンは自動進行（フロントエンドから呼び出す必要なし）
+- `GameView` として人間視点の状態を返す（AI手札は枚数のみ、未公開部分は非表示）
+
+#### `core/game.py` — 最小変更
+- `history` タプルを `(fp_card, sp_card, result)` から `(fp_card, sp_card, result, first_player_idx)` に拡張
+  - API側でラウンドの先手を特定するために必要
+  - `info_set_key()` のエンコードは変更なし（既存学習重みと互換性維持）
+
+#### `frontend/` — React + TypeScript UI
+- `src/types.ts`: `CardData`, `RoundRecord`, `GameView` インターフェース定義
+- `src/api.ts`: FastAPI クライアント（`/api` プレフィックスで Vite proxy 経由）
+- `src/App.tsx`: ゲーム全体のステートマシン（start / playing / round_result / game_over）
+- `src/components/Card.tsx`: カードコンポーネント（表面・裏面・色ヒント表示対応）
+- `src/components/HistoryPanel.tsx`: 対戦履歴トグルパネル
+- `vite.config.ts`: `/api` → `http://localhost:8000` のプロキシ設定追加
+
+### 起動方法
+```bash
+# ターミナル1: Python API サーバー
+python -m uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
+
+# ターミナル2: Vite dev server
+cd frontend && npm run dev
+# → http://localhost:5173 でゲームをプレイ可能
+```
+
+### 次フェーズの予定
+- AIの学習: `python -m core.train` で `weights.pkl` を生成し、CFR戦略を有効化
+- Tauri統合: Rust インストール後に `src-tauri/` を追加して `.exe` ビルド
