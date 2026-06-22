@@ -22,6 +22,21 @@
 - `save` / `load` で学習済み重みを `.pkl` ファイルに保存・再開可能
 - `action_probs(info_set_key, actions)` でナッシュ均衡近似の行動確率を取得
 
+---
+
+## 2026-06-22 — Phase 1 修正: Outcome Sampling MCCFR への変更
+
+**ブランチ: `step2`**
+
+#### `core/cfr.py` — MCCFRアルゴリズムの変更（External → Outcome Sampling）
+
+- **変更前**: External Sampling MCCFR（更新プレイヤーのノードで全行動展開、相手ノードで1アクションサンプリング）
+- **変更後**: Outcome Sampling MCCFR（更新プレイヤーのノードでも1アクションのみサンプリング）
+  - 計算量が O(actions^depth) から O(game_depth) に改善
+  - εグリーディ探索（ε=0.6）を導入し、全行動が確率的に探索されることを保証
+  - reach確率（`pi_i`, `pi_neg`）を明示的に管理し、regret更新に重要度重みを適用
+  - 進捗ログ間隔を 10,000 → 100,000 イテレーションに変更（出力頻度の最適化）
+
 #### `core/train.py` — 学習エントリーポイント
 - `python -m core.train` で即座に学習開始
 - `--method`, `--iter`, `--load`, `--save`, `--quiet` オプション対応
